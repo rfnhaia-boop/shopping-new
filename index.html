@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shopping NEW</title>
+<link rel="stylesheet" href="css/shopping.css">
+</head>
+<body>
+<div id="hud">
+  <div id="marca" class="mono">Shopping <b>NEW</b></div>
+  <div id="local" class="mono">Alameda central</div>
+</div>
+<div id="dica" class="mono"><b>Clique no chão</b> pra andar · <b>WASD</b> · <b>arraste</b> pra girar · <b>rodinha</b> zoom</div>
+<div id="mini" title="Abrir o mapa (M)"><canvas id="mini-c" width="220" height="190"></canvas><span class="mono">Mapa · M</span></div>
+<div id="mapa"><div class="m-box"><button id="m-fecha" aria-label="Fechar">×</button><div class="mono m-tit">Mapa do shopping</div><canvas id="mapa-c" width="1000" height="760"></canvas>
+<div class="m-leg mono"><span><i style="background:#e4f6a8"></i>VANTRA (pronta)</span><span><i style="background:#f4a6b8"></i>em breve (moda)</span><span><i style="background:#d4ff3a;border:2px solid #222"></i>você</span><span><i style="background:#D4537E"></i>mulher</span><span><i style="background:#378ADD"></i>homem</span><b>clique na VANTRA pra ir até a porta</b></div></div></div>
+<aside id="ficha"><button id="f-fecha" aria-label="Fechar">×</button><div class="f-foto"><img id="f-img" alt=""></div>
+<div class="f-info"><div class="mono" id="f-tag"></div><h2 id="f-nome"></h2><ul id="f-lista"></ul><div class="f-tot"><span class="mono">Total</span><b id="f-preco"></b></div>
+<button id="f-provar" class="b-lima">Provar</button><button id="f-comprar" class="b-linha">Comprar e vestir</button><p id="f-nota" class="mono"></p></div></aside>
+<div id="provando"><span class="mono">Provando</span><b id="pv-nome"></b><span id="pv-preco" class="pv-p"></span><button id="pv-comprar" class="b-lima">Comprar</button><button id="pv-devolver" class="b-linha">Devolver</button></div>
+<button id="b-vantra" class="mono">Ir à VANTRA →</button><button id="b-musica" class="mono">♪ Música da loja</button><div id="player"></div>
+<div id="aviso" class="mono"></div>
+<div id="veu"></div>
+<div id="carrega" class="mono">Abrindo o shopping…</div>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
