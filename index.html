@@ -17,9 +17,23 @@
 <div class="m-leg mono"><span><i style="background:#e4f6a8"></i>VANTRA (pronta)</span><span><i style="background:#f4a6b8"></i>em breve (moda)</span><span><i style="background:#d4ff3a;border:2px solid #222"></i>você</span><span><i style="background:#D4537E"></i>mulher</span><span><i style="background:#378ADD"></i>homem</span><b>clique na VANTRA pra ir até a porta</b></div></div></div>
 <aside id="ficha"><button id="f-fecha" aria-label="Fechar">×</button><div class="f-foto"><img id="f-img" alt=""></div>
 <div class="f-info"><div class="mono" id="f-tag"></div><h2 id="f-nome"></h2><ul id="f-lista"></ul><div class="f-tot"><span class="mono">Total</span><b id="f-preco"></b></div>
-<button id="f-provar" class="b-lima">Provar</button><button id="f-comprar" class="b-linha">Comprar e vestir</button><p id="f-nota" class="mono"></p></div></aside>
-<div id="provando"><span class="mono">Provando</span><b id="pv-nome"></b><span id="pv-preco" class="pv-p"></span><button id="pv-comprar" class="b-lima">Comprar</button><button id="pv-devolver" class="b-linha">Devolver</button></div>
-<button id="b-vantra" class="mono">Ir à VANTRA →</button><button id="b-musica" class="mono">♪ Música da loja</button><div id="player"></div>
+<button id="f-comprar" class="b-lima">Pôr na sacola</button><button id="f-provar" class="b-linha">Provar</button><p id="f-nota" class="mono"></p></div></aside>
+<button id="b-sacola" class="mono" aria-label="Abrir a sacola"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg> Sacola <b id="sc-n">0</b></button>
+<div id="carteira" class="mono" title="Moedas do jogo"><i></i><b id="ct-v">500</b> moedas</div>
+<button id="b-closet" class="mono" aria-label="Abrir meu closet"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5a2 2 0 1 1 2 2c-.8 0-2 .6-2 1.6V9l8 6.2a1 1 0 0 1-.6 1.8H4.6a1 1 0 0 1-.6-1.8L12 9"/></svg> Meu closet</button>
+<aside id="closet"><button id="cl-fecha" aria-label="Fechar">×</button><div class="cl-abas"><button class="cl-aba on" data-aba="roupas">Roupas</button><button class="cl-aba" data-aba="corpo">Personagem</button></div><div id="cl-corpo"></div></aside>
+<aside id="sacola"><button id="sc-fecha" aria-label="Fechar">×</button><div class="mono sc-tit">Sua sacola</div><ul id="sc-lista"></ul>
+<div class="sc-tot"><span class="mono">Total</span><b id="sc-total"></b></div><div class="sc-saldo mono">Seu saldo <b id="sc-saldo"></b></div>
+<div class="sc-botoes"></div><p class="mono" id="sc-nota"></p></aside>
+<button id="b-pagar" class="mono">Pagar no caixa</button>
+<div id="caixa"><div class="cx-box"><button id="cx-fecha" aria-label="Fechar">×</button><div class="mono cx-tit">Caixa</div><h2>Finalizar compra</h2><ul id="cx-lista"></ul>
+<div class="cx-linha"><span class="mono">Total</span><b id="cx-total"></b></div><div class="cx-linha mut"><span class="mono">Seu saldo</span><span id="cx-saldo"></span></div><div class="cx-linha mut"><span class="mono">Depois da compra</span><span id="cx-depois"></span></div>
+<div class="mono cx-tit">Como você quer sair?</div><div class="cx-ops"><button class="cx-op on" data-v="vestir"><b>Sair vestindo</b><span>Troca a roupa agora</span></button><button class="cx-op" data-v="sacola"><b>Levar na sacola</b><span>Vai pro seu closet</span></button></div>
+<button id="cx-pagar" class="b-lima">Pagar</button><p class="mono cx-nota">Moedas do jogo · nenhuma cobrança real</p></div></div>
+<aside id="provador"><div class="mono" id="pr-loja">Provador</div><h2>Experimente</h2><ul id="pr-lista"></ul><p class="mono" id="pr-nota"></p>
+<div class="pr-bt"><button id="pr-caixa" class="b-lima">Ir ao caixa</button><button id="pr-sair" class="b-linha">Sair do provador</button></div></aside>
+<div id="provando"><span class="mono">Provando</span><b id="pv-nome"></b><span id="pv-preco" class="pv-p"></span><button id="pv-comprar" class="b-lima">Pôr na sacola</button><button id="pv-devolver" class="b-linha">Devolver</button></div>
+<button id="b-vantra" class="mono">Ir à VANTRA →</button><button id="b-atelie" class="mono">Ir ao ATELIÊ →</button><button id="b-musica" class="mono">♪ Música da loja</button><div id="player"></div>
 <div id="aviso" class="mono"></div>
 <div id="veu"></div>
 <div id="carrega" class="mono">Abrindo o shopping…</div>

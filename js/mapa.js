@@ -1,6 +1,6 @@
 // SHOPPING NEW — minimapa (canto da tela) que abre o MAPA inteiro do lugar. Mostra átrio, alas, a loja VANTRA, as vitrines "em breve", você e o pessoal andando.
 // Clicar numa região da VANTRA no mapa grande leva você até a porta dela.
-import { SH, ALAS, EM_BREVE, VANTRA, COR_BREVE } from './planta.js';
+import { SH, ALAS, EM_BREVE, VANTRA, ATELIE, COR_BREVE } from './planta.js';
 
 export function criaMapa({ J, npcs, irPara }) {
   const R6 = SH.apotema / Math.cos(Math.PI / 6), zAl = SH.zAl;
@@ -13,10 +13,11 @@ export function criaMapa({ J, npcs, irPara }) {
   ALAS.forEach(a => formas.push({ tipo: 'ala', nome: a.nome, pts: rect(a, SH.apotema - .5, SH.apotema + a.comp, -zAl, zAl), cor: '#eceae4', borda: '#cdbf9f' }));
   const av = ala(VANTRA.ala);
   formas.push({ tipo: 'vantra', nome: 'VANTRA', sub: 'loja âncora · moda', pts: rect(av, VANTRA.x0, VANTRA.x0 + VANTRA.w, zAl, zAl + VANTRA.d), cor: '#e4f6a8', borda: '#a9c93a' });
+  { const at = ala(ATELIE.ala); formas.push({ tipo: 'vantra', nome: 'ATELIÊ', sub: 'nova loja · em construção', pts: rect(at, ATELIE.x0, ATELIE.x0 + ATELIE.w, zAl, zAl + ATELIE.d), cor: '#f1ece2', borda: '#b9a98a' }); }
   ALAS.forEach(a => {
     const lista = EM_BREVE[a.id] || {};
     for (const lad of [-1, 1]) {
-      if (a.id === VANTRA.ala && lad === VANTRA.lado) continue;
+      if ((a.id === VANTRA.ala && lad === VANTRA.lado) || (a.id === ATELIE.ala && lad === ATELIE.lado)) continue;
       const nomes = lista[String(lad)] || [], slot = (a.comp - 6) / Math.max(nomes.length, 1);
       nomes.forEach((nome, i) => {
         const x0 = SH.apotema + 3 + slot * i, z0 = lad > 0 ? zAl : -zAl - 7, z1 = lad > 0 ? zAl + 7 : -zAl;

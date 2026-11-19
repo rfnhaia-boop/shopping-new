@@ -1,7 +1,7 @@
 // SHOPPING NEW (moda) — arquitetura em TRÊS ALAS: átrio hexagonal alto com claraboia e escultura, 3 alas de 16 m de largura (entrada, VANTRA, em breve),
 // aletas inclinadas nas paredes do átrio, vitrines "em breve" em vidro colorido. Só a VANTRA é loja de verdade (loja-vantra.js).
 import * as THREE from 'three';
-import { SH, ALAS, EM_BREVE, VANTRA, COR_BREVE } from './planta.js';
+import { SH, ALAS, EM_BREVE, VANTRA, ATELIE, COR_BREVE } from './planta.js';
 
 const caixa = (w, h, d, mat) => new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
 function textoTex(txt, sub, cor, w = 768, h = 240, subCor = 'rgba(255,255,255,.88)') {
@@ -122,7 +122,7 @@ export function construirShopping(scene) {
     }
     const lista = EM_BREVE[a.id] || {};
     for (const lad of [-1, 1]) {
-      if (a.id === VANTRA.ala && lad === VANTRA.lado) continue;            // esse lado é a loja VANTRA
+      if ((a.id === VANTRA.ala && lad === VANTRA.lado) || (a.id === ATELIE.ala && lad === ATELIE.lado)) continue;            // esse lado é a loja VANTRA
       const nomes = lista[String(lad)] || [], slot = (L - 6) / Math.max(nomes.length, 1), zf = lad * zAl;
       nomes.forEach((nome, i) => {
         const cx = x0 + 3 + slot * (i + .5), cor = COR_BREVE[(i + (lad > 0 ? 3 : 0)) % COR_BREVE.length];

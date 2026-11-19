@@ -21,3 +21,5 @@ export const EM_BREVE = {
 // a loja âncora: ocupa o lado +1 da ala VANTRA, a partir de x
 export const VANTRA = { ala: 'vantra', lado: 1, x0: 17, w: 36, d: 36 };
 export const COR_BREVE = ['#f4a6b8', '#8fc6f4', '#ffd36b', '#9be0b0', '#c9aef5', '#ffb07a'];
+// 2ª loja (branca, referências do Google): lado +1 da ala street. Nome de trabalho: ATELIÊ
+export const ATELIE = { ala: 'street', lado: 1, x0: 17, w: 36, d: 36 };

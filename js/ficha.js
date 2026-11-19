@@ -7,7 +7,7 @@ import { CATALOGO_ROUPAS } from '../../shared/personagem/guarda-roupa.js';
 import { Perfil } from '../../shared/personagem/perfil.js';
 
 const $ = s => document.querySelector(s);
-const brl = v => v ? 'R$ ' + v.toLocaleString('pt-BR') : 'grátis';
+const brl = v => v ? `${v} moedas` : 'grátis';
 const item = id => CATALOGO_ROUPAS.find(r => r.id === id);
 
 /* foto 3D: renderiza um clone do objeto (peça ou manequim) num estúdio claro, fora da tela */
@@ -29,7 +29,7 @@ function foto(obj) {
   R.render(S, C); const url = R.domElement.toDataURL('image/png'); S.remove(c); return url;
 }
 
-export function criaFicha({ J, irProvador, aviso }) {
+export function criaFicha({ J, provar, aviso, sacola }) {
   let atual = null;
   const painel = $('#ficha'), bar = $('#provando');
   const fecha = () => painel.classList.remove('on');
@@ -42,13 +42,14 @@ export function criaFicha({ J, irProvador, aviso }) {
     atual = info;
     const ids = pecasDe(info), total = ids.reduce((t, id) => t + ((item(id) || {}).preco || 0), 0);
     $('#f-img').src = foto(obj);
-    $('#f-tag').textContent = info.tipo === 'peca' ? 'Peça · Drop 01' : 'Look completo · Drop 01';
-    $('#f-nome').textContent = info.tipo === 'peca' ? (item(info.id) || {}).nome || info.id : (info.nome || 'Look VANTRA');
+    $('#f-tag').textContent = info.tipo === 'peca' ? 'Peça' : 'Look do manequim';
+    $('#f-nome').textContent = info.tipo === 'peca' ? (item(info.id) || {}).nome || info.id : (info.nome || 'Look completo');
     $('#f-lista').innerHTML = ids.map(id => { const r = item(id) || { nome: id }; const tem = Perfil.possui(id, r.preco); return `<li><span>${r.nome}</span><b>${tem ? 'seu' : brl(r.preco)}</b></li>`; }).join('');
     $('#f-preco').textContent = brl(total);
     const ok = podeVestir(ids);
     $('#f-provar').disabled = !ok; $('#f-comprar').disabled = !ok;
-    $('#f-nota').textContent = ok ? 'Provar leva você ao provador e veste a roupa na sua personagem.' : 'Essa roupa é feita pro corpo feminino. Troque no criador pra provar.';
+    $('#f-nota').textContent = ok ? 'Ponha na sacola e pague no caixa, ou prove antes no provador.' : 'Essa roupa é feita pro corpo feminino. Troque no closet pra provar.';
+    $('#f-comprar').disabled = false;
     painel.classList.add('on');
   }
 
@@ -57,24 +58,15 @@ export function criaFicha({ J, irProvador, aviso }) {
     ids.forEach(id => { const r = item(id); if (r) roupas[r.slot] = id; });
     return J.p.muda({ roupas });
   }
-  $('#f-provar').onclick = async () => {
-    if (!atual || !J.p) return;
-    const ids = pecasDe(atual);
-    if (!J.provando) J.provando = { antes: { ...J.p.cfg.roupas } };
-    J.provando.ids = ids; fecha(); irProvador();
-    await vestir(ids);
-    const total = ids.reduce((t, id) => t + ((item(id) || {}).preco || 0), 0);
-    $('#pv-nome').textContent = ids.map(id => (item(id) || {}).nome || id).join(' + ');
-    $('#pv-preco').textContent = brl(total); bar.classList.add('on');
-  };
+  $('#f-provar').onclick = () => { if (!atual || !J.p) return; fecha(); provar(pecasDe(atual)); };
   async function comprar(ids) {
     ids.forEach(id => { const r = item(id); Perfil.compra(id, r ? r.preco : 0); });
     const p = Perfil.ler() || {}; Perfil.salvar({ nome: p.nome || 'Visitante', cfg: { ...J.p.cfg } });
     J.provando = null; bar.classList.remove('on');
     aviso('Comprado (demo) e salvo no seu personagem');
   }
-  $('#f-comprar').onclick = async () => { if (!atual || !J.p) return; const ids = pecasDe(atual); fecha(); await vestir(ids); comprar(ids); };
-  $('#pv-comprar').onclick = () => { if (J.provando) comprar(J.provando.ids); };
+  $('#f-comprar').onclick = () => { if (!atual) return; if (sacola.poe(pecasDe(atual))) fecha(); };
+  $('#pv-comprar').onclick = async () => { if (!J.provando || !J.p) return; sacola.poe(J.provando.ids); await J.p.muda({ roupas: J.provando.antes }); J.provando = null; bar.classList.remove('on'); };
   $('#pv-devolver').onclick = async () => { if (!J.provando || !J.p) return; await J.p.muda({ roupas: J.provando.antes }); J.provando = null; bar.classList.remove('on'); aviso('Roupa devolvida'); };
   addEventListener('keydown', e => { if (e.code === 'Escape') fecha(); });
   return { abrir, aberta: () => painel.classList.contains('on') };
