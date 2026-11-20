@@ -20,7 +20,7 @@ import { criaCloset } from './closet.js';
 import { criaRoboPainel } from './robo-painel.js';
 import { montaLojasNew } from './lojas-new.js';
 import { interiorOrganico } from './interior-organico.js';
-import { LOJA_CFG } from '../../vantra-3d/js/catalogo.js';
+import { LOJA_CFG } from './catalogo.js';
 
 const $ = s => document.querySelector(s);
 const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });

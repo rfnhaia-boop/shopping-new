@@ -9,9 +9,8 @@ Shopping 3D de moda no navegador (Three.js 0.160, sem build: ES modules + import
    <raiz>/
      shopping-3d/        <- este repo
      shared/personagem/  <- do MUNDO-MEX
-     vantra-3d/js/catalogo.js   <- também importado pelo main.js
    ```
-   Clone o MUNDO-MEX e deixe `shopping-3d` dentro de `Ativos/` ao lado de `shared/` e `vantra-3d/`, ou ajuste os imports `../../shared/...`.
+   Dica: o MUNDO-MEX é enorme; use clone parcial (`git sparse-checkout set shared/personagem`) e deixe `shopping-3d` ao lado de `shared/`.
 2. Sirva a **raiz** (a pasta que contém `shopping-3d` e `shared`) com qualquer servidor estático, ex.: `npx serve <raiz>` ou `python -m http.server 8099`.
 3. Abra `http://localhost:8099/shopping-3d/index.html`. Precisa de internet (Three.js e fontes vêm de CDN).
 

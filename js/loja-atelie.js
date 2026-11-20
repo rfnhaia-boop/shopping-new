@@ -9,7 +9,7 @@ import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
 import { Personagem } from '../../shared/personagem/personagem.js';
 import { CATALOGO_ROUPAS } from '../../shared/personagem/guarda-roupa.js';
-import { PECAS } from '../../vantra-3d/js/catalogo.js';
+import { PECAS } from './catalogo.js';
 import { SH } from './planta.js';
 
 const _gl = new GLTFLoader(), _cache = new Map();
