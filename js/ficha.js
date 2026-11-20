@@ -38,20 +38,42 @@ export function criaFicha({ J, provar, aviso, sacola }) {
   const pecasDe = info => info.tipo === 'peca' ? [info.id] : Object.values(info.roupas).filter(id => id && id !== 'nenhum');
   const podeVestir = ids => { const corpo = J.p && J.p.cfg.corpo; return ids.every(id => { const r = item(id); return !r || !r.corpos || r.corpos.includes(corpo); }); };
 
+  // barra "Provando": mostra o que está no corpo e ainda não é seu
+  function barra() {
+    if (!J.provando) { bar.classList.remove('on'); return; }
+    const ids = J.provando.ids.filter(id => !Perfil.possui(id, (item(id) || {}).preco) && !sacola.itens().includes(id));
+    if (!ids.length) { bar.classList.remove('on'); return; }
+    $('#pv-nome').textContent = ids.map(id => (item(id) || {}).nome || id).join(' + ');
+    $('#pv-preco').textContent = brl(ids.reduce((t, id) => t + ((item(id) || {}).preco || 0), 0)); bar.classList.add('on');
+  }
+  // veste na hora (prova no próprio corpo, sem ir ao provador); o que não for pago volta ao sair da loja
+  async function provaAqui(ids) {
+    if (!J.p || !podeVestir(ids)) return;
+    if (!J.provando) J.provando = { antes: { ...J.p.cfg.roupas }, ids: [] };
+    ids.forEach(id => { if (!J.provando.ids.includes(id)) J.provando.ids.push(id); });
+    await vestir(ids);
+    // tira da lista o que saiu do corpo (trocou de peça no mesmo lugar)
+    J.provando.ids = J.provando.ids.filter(id => { const r = item(id); return r && J.p.cfg.roupas[r.slot] === id; });
+    barra();
+  }
   function abrir(info, obj) {
     atual = info;
-    const ids = pecasDe(info), total = ids.reduce((t, id) => t + ((item(id) || {}).preco || 0), 0);
+    const ids = pecasDe(info), total = ids.reduce((t, id) => t + ((item(id) || {}).preco || 0), 0), peca = info.tipo === 'peca';
     $('#f-img').src = foto(obj);
-    $('#f-tag').textContent = info.tipo === 'peca' ? 'Peça' : 'Look do manequim';
-    $('#f-nome').textContent = info.tipo === 'peca' ? (item(info.id) || {}).nome || info.id : (info.nome || 'Look completo');
-    $('#f-lista').innerHTML = ids.map(id => { const r = item(id) || { nome: id }; const tem = Perfil.possui(id, r.preco); return `<li><span>${r.nome}</span><b>${tem ? 'seu' : brl(r.preco)}</b></li>`; }).join('');
+    $('#f-tag').textContent = peca ? 'Peça' : 'Look do manequim';
+    $('#f-nome').textContent = peca ? (item(info.id) || {}).nome || info.id : (info.nome || 'Look completo');
+    $('#f-lista').innerHTML = ids.map(id => { const r = item(id) || { nome: id }; const tem = Perfil.possui(id, r.preco), na = sacola.itens().includes(id);
+      return `<li><span>${r.nome}</span><b>${tem ? 'seu' : brl(r.preco)}</b>${!peca && !tem ? `<button class="f-1" data-id="${id}">${na ? 'na sacola' : '+ sacola'}</button>` : ''}</li>`; }).join('');
     $('#f-preco').textContent = brl(total);
     const ok = podeVestir(ids);
-    $('#f-provar').disabled = !ok; $('#f-comprar').disabled = !ok;
-    $('#f-nota').textContent = ok ? 'Ponha na sacola e pague no caixa, ou prove antes no provador.' : 'Essa roupa é feita pro corpo feminino. Troque no closet pra provar.';
-    $('#f-comprar').disabled = false;
+    $('#f-provar').disabled = !ok; $('#f-comprar').disabled = false;
+    $('#f-comprar').textContent = peca ? 'Pôr na sacola' : 'Pôr o look na sacola';
+    $('#f-provar').textContent = 'Provar no espelho';
+    $('#f-nota').textContent = ok ? (peca ? 'Já está em você. Ponha na sacola e pague no caixa.' : 'O look já está em você. Leve tudo ou só as peças que quiser.') : 'Essa roupa é feita pro outro corpo. Troque no closet pra provar.';
     painel.classList.add('on');
+    if (ok) provaAqui(ids);
   }
+  $('#f-lista').addEventListener('click', e => { const b = e.target.closest('button.f-1'); if (!b) return; if (sacola.poe([b.dataset.id])) { b.textContent = 'na sacola'; barra(); } });
 
   function vestir(ids) {
     const roupas = { ...J.p.cfg.roupas };
@@ -65,8 +87,8 @@ export function criaFicha({ J, provar, aviso, sacola }) {
     J.provando = null; bar.classList.remove('on');
     aviso('Comprado (demo) e salvo no seu personagem');
   }
-  $('#f-comprar').onclick = () => { if (!atual) return; if (sacola.poe(pecasDe(atual))) fecha(); };
-  $('#pv-comprar').onclick = async () => { if (!J.provando || !J.p) return; sacola.poe(J.provando.ids); await J.p.muda({ roupas: J.provando.antes }); J.provando = null; bar.classList.remove('on'); };
+  $('#f-comprar').onclick = () => { if (!atual) return; if (sacola.poe(pecasDe(atual))) { fecha(); barra(); } };
+  $('#pv-comprar').onclick = () => { if (!J.provando) return; sacola.poe(J.provando.ids); barra(); };   // continua vestindo; paga no caixa
   $('#pv-devolver').onclick = async () => { if (!J.provando || !J.p) return; await J.p.muda({ roupas: J.provando.antes }); J.provando = null; bar.classList.remove('on'); aviso('Roupa devolvida'); };
   addEventListener('keydown', e => { if (e.code === 'Escape') fecha(); });
   return { abrir, aberta: () => painel.classList.contains('on') };

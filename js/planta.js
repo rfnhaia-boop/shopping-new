@@ -10,12 +10,12 @@ export const SH = {
 export const ALAS = [
   { id: 'entrada', ang: Math.PI,       comp: 30, nome: 'Entrada' },
   { id: 'vantra',  ang: Math.PI / 3,   comp: 52, nome: 'Ala VANTRA' },
-  { id: 'street',  ang: -Math.PI / 3,  comp: 52, nome: 'Ala em breve' },
+  { id: 'street',  ang: -Math.PI / 3,  comp: 52, nome: 'Ala Street' },
 ];
 // vitrines "em breve" (só moda). Cada ala distribui as suas pelos dois lados.
 export const EM_BREVE = {
   entrada: { '-1': ['Moda feminina', 'Joias'], '1': ['Calçados', 'Óculos'] },
-  street:  { '-1': ['Moda masculina', 'Tênis & street', 'Jeans'], '1': ['Esportiva', 'Premium', 'Acessórios'] },
+  street:  { '1': ['Esportiva', 'Premium', 'Acessórios'] },
   vantra:  { '-1': ['Íntima & praia', 'Infantil'] },
 };
 // a loja âncora: ocupa o lado +1 da ala VANTRA, a partir de x
@@ -23,3 +23,5 @@ export const VANTRA = { ala: 'vantra', lado: 1, x0: 17, w: 36, d: 36 };
 export const COR_BREVE = ['#f4a6b8', '#8fc6f4', '#ffd36b', '#9be0b0', '#c9aef5', '#ffb07a'];
 // 2ª loja (branca, referências do Google): lado +1 da ala street. Nome de trabalho: ATELIÊ
 export const ATELIE = { ala: 'street', lado: 1, x0: 17, w: 36, d: 36 };
+// 3ª loja: LE FERRI (cliente) — vitrine/boutique no lado -1 da ala VANTRA, com portal pro mundo próprio da marca
+export const LEFERRI = { ala: 'vantra', lado: -1, x0: 17, w: 36, d: 26 };

@@ -562,7 +562,7 @@ export function montaAtelie(scene, u, mundo) {
     { // arara de parede à direita (d 4.6..8.6)
       const trilho = new THREE.Mesh(new THREE.CylinderGeometry(.016, .016, 4.2, 8), mChamp); trilho.rotation.x = Math.PI / 2; trilho.position.set(xD - .3, 1.95, Z(6.6)); g.add(trilho);
       for (const dd of [4.5, 8.7]) { const br = new THREE.Mesh(new THREE.BoxGeometry(.32, .03, .03), mChamp); br.position.set(xD - .16, 1.95, Z(dd)); g.add(br); }
-      ['top-referencia', 'calca-vacuo', 'saia-assimetrica', 'tee-ceramica', 'top-crop04', 'camiseta-preta'].forEach((id, i) => penduraPeca(g, id, new THREE.Vector3(xD - .3, 1.95, Z(4.9 + i * .72)), MX).catch(() => {}));
+      ['japi-jaqueta', 'japi-calca', 'atelie-jaqueta', 'atelie-saia', 'atelie-camiseta', 'atelie-calca'].forEach((id, i) => penduraPeca(g, id, new THREE.Vector3(xD - .3, 1.95, Z(4.9 + i * .72)), MX).catch(() => {}));
       ret(xD - .6, xD + .2, Z(4.4), Z(8.8));
       const lp = new THREE.SpotLight(0xfff0d8, 30, 9, .6, .6, 1.4); lp.position.set(xD - 3, 4.5, Z(6.6)); lp.target.position.set(xD, 1.4, Z(6.6)); g.add(lp, lp.target);
     }
@@ -580,14 +580,14 @@ export function montaAtelie(scene, u, mundo) {
       const pz = Z(6.4), podio = new THREE.Mesh(new THREE.CylinderGeometry(1.25, 1.3, .18, 64), mMarm); podio.position.set(cx, .09, pz); g.add(podio);
       const aro = new THREE.Mesh(new THREE.TorusGeometry(1.27, .022, 8, 64), mLed); aro.rotation.x = Math.PI / 2; aro.position.set(cx, .03, pz); g.add(aro);
       const cir = new THREE.Mesh(new THREE.TorusGeometry(1.6, .02, 6, 96), mLed); cir.rotation.x = Math.PI / 2; cir.position.set(cx, H - .02, pz); g.add(cir);
-      manequim(g, new THREE.Vector3(cx, .18, pz), { corpo: 'fem', roupas: PECAS[3].roupas, nome: PECAS[3].nome }, FD).catch(e => console.error('manequim', e));
+      manequim(g, new THREE.Vector3(cx, .18, pz), { corpo: 'fem', roupas: { camisa: 'japi-jaqueta', calca: 'japi-calca', calcado: 'bota-v' }, nome: 'Look JAPI' }, FD).catch(e => console.error('manequim', e));
       circ(cx, pz, 1.45);
       const sp = new THREE.SpotLight(0xfff2de, 40, 10, .45, .5, 1.3); sp.position.set(cx, H - .4, pz); sp.target.position.set(cx, 0, pz); g.add(sp, sp.target);
     }
     // ---- ÁTRIO direito: galeria de manequins em pedestais pretos com borda de luz ----
     {
       const mPreto = new THREE.MeshPhysicalMaterial({ color: 0x0e0f12, roughness: .15, clearcoat: 1 });
-      [[11.6, 3.4, { corpo: 'fem', roupas: PECAS[5].roupas, nome: PECAS[5].nome }], [13.9, 5.0, HOMENS[3]], [11.3, 6.9, { corpo: 'fem', roupas: PECAS[1].roupas, nome: PECAS[1].nome }]].forEach(([x, d, cfg], i) => {
+      [[11.6, 3.4, { corpo: 'fem', roupas: { camisa: 'atelie-jaqueta', calca: 'atelie-saia', calcado: 'bota-v' }, nome: 'Look Ateliê noite' }], [13.9, 5.0, HOMENS[3]], [11.3, 6.9, { corpo: 'fem', roupas: { camisa: 'atelie-camiseta', calca: 'atelie-calca', calcado: 'bota-v' }, nome: 'Look Ateliê dia' }]].forEach(([x, d, cfg], i) => {
         const z = Z(d), b = new THREE.Mesh(new THREE.BoxGeometry(1.1, .26, 1.1), mPreto); b.position.set(x, .13, z); g.add(b);
         const fr = new THREE.Mesh(new THREE.BoxGeometry(1.12, .02, 1.12), mLed); fr.position.set(x, .01, z); g.add(fr);
         manequim(g, new THREE.Vector3(x, .26, z), cfg, FD + (i - 1) * .35).catch(e => console.error('manequim', e));

@@ -46,8 +46,12 @@ export function criaCloset({ J, aviso, sacola, trocaPersonagem }) {
     const t = e.target.closest('button'); if (!t || t.disabled) return;
     if (t.classList.contains('cl-aba')) { aba = t.dataset.aba; desenha(); return; }
     if (t.dataset.slot) {                                            // vestir peça
-      if (J.provando) { aviso('Saia do provador antes de trocar pelo closet'); return; }
-      aplica({ roupas: { ...J.p.cfg.roupas, [t.dataset.slot]: t.dataset.id } }); return;
+      const base = { ...J.p.cfg.roupas };
+      if (J.provando) {                                   // o que estava sendo provado e não é seu volta antes de trocar
+        for (const [sl, id] of Object.entries(base)) { const r = item(id); if (r && !meu(r)) base[sl] = J.provando.antes[sl]; }
+        J.provando = null; const pb = document.querySelector('#provando'); pb && pb.classList.remove('on');
+      }
+      aplica({ roupas: { ...base, [t.dataset.slot]: t.dataset.id } }); return;
     }
     if (t.dataset.k === 'corpo') {                                   // trocar corpo: o que não serve no corpo novo volta pro padrão
       const novo = t.dataset.v; if (novo === J.p.cfg.corpo) return;

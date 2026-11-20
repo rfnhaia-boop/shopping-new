@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Shopping NEW</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/shopping.css">
 </head>
 <body>
@@ -33,9 +35,16 @@
 <aside id="provador"><div class="mono" id="pr-loja">Provador</div><h2>Experimente</h2><ul id="pr-lista"></ul><p class="mono" id="pr-nota"></p>
 <div class="pr-bt"><button id="pr-caixa" class="b-lima">Ir ao caixa</button><button id="pr-sair" class="b-linha">Sair do provador</button></div></aside>
 <div id="provando"><span class="mono">Provando</span><b id="pv-nome"></b><span id="pv-preco" class="pv-p"></span><button id="pv-comprar" class="b-lima">Pôr na sacola</button><button id="pv-devolver" class="b-linha">Devolver</button></div>
-<button id="b-vantra" class="mono">Ir à VANTRA →</button><button id="b-atelie" class="mono">Ir ao ATELIÊ →</button><button id="b-musica" class="mono">♪ Música da loja</button><div id="player"></div>
+<button id="b-ir" class="mono" aria-label="Ir para uma loja (tecla T)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg> Ir para <kbd>T</kbd></button><div id="ir"><div class="ir-box"><div class="ir-top"><span class="mono">Ir para</span><button class="ir-x" aria-label="Fechar">×</button></div><ul class="ir-lista"></ul><p class="mono ir-dica">Shift ou R corre · clique longe no chão e ela corre sozinha</p></div></div><button id="b-musica" class="mono">♪ Música da loja</button><div id="player"></div>
 <div id="aviso" class="mono"></div>
-<div id="veu"></div>
+<div id="robo-balao" class="mono"></div>
+<div id="robo-p"><div class="rp-box">
+  <div class="rp-top"><div class="rp-av"><i></i></div><div><b>Neo</b><span class="mono">assistente do Shopping NEW</span></div><button class="rp-x" aria-label="Fechar">×</button></div>
+  <div class="rp-abas"><button data-aba="sacolas" class="on">Sacolas</button><button data-aba="papo">Conversar</button></div>
+  <div class="rp-corpo"></div>
+  <form class="rp-form"><input placeholder="Fala com o Neo… (ex: me leva pra LE FERRI)" aria-label="Mensagem pro Neo"><button class="b-lima">Enviar</button></form>
+</div></div>
+<div id="veu"><div class="lf-logo">LE FERRI</div></div>
 <div id="carrega" class="mono">Abrindo o shopping…</div>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <script type="module" src="js/main.js"></script>

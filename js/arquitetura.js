@@ -1,7 +1,7 @@
 // SHOPPING NEW (moda) — arquitetura em TRÊS ALAS: átrio hexagonal alto com claraboia e escultura, 3 alas de 16 m de largura (entrada, VANTRA, em breve),
 // aletas inclinadas nas paredes do átrio, vitrines "em breve" em vidro colorido. Só a VANTRA é loja de verdade (loja-vantra.js).
 import * as THREE from 'three';
-import { SH, ALAS, EM_BREVE, VANTRA, ATELIE, COR_BREVE } from './planta.js';
+import { SH, ALAS, EM_BREVE, VANTRA, ATELIE, LEFERRI, COR_BREVE } from './planta.js';
 
 const caixa = (w, h, d, mat) => new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
 function textoTex(txt, sub, cor, w = 768, h = 240, subCor = 'rgba(255,255,255,.88)') {
@@ -101,7 +101,8 @@ export function construirShopping(scene) {
   });
   const base = add(new THREE.Mesh(new THREE.CylinderGeometry(3.4, 3.4, .5, 6), mBranco)); base.position.y = .25; base.rotation.y = Math.PI / 6;
   obst.push({ t: 'c', x: 0, z: 0, r: 3.9 });
-  for (let k = 0; k < 3; k++) { const a = k * 2.094 + 1.047, b = add(caixa(3.4, .45, .9, mMadeira)); b.position.set(Math.cos(a) * 7.2, .25, Math.sin(a) * 7.2); b.rotation.y = -a + Math.PI / 2; obst.push({ t: 'c', x: b.position.x, z: b.position.z, r: 1.4 }); }
+  // bancos curvos de madeira acompanhando o círculo do átrio (arco de ~28°)
+  for (let k = 0; k < 3; k++) { const a = k * 2.094 + 1.047, b = add(new THREE.Mesh(new THREE.TorusGeometry(7.2, .3, 6, 24, .5), mMadeira)); b.rotation.x = -Math.PI / 2; b.rotation.z = -a - .25; b.scale.z = .75; b.position.y = .26; b.castShadow = true; obst.push({ t: 'c', x: Math.cos(a) * 7.2, z: Math.sin(a) * 7.2, r: 1.5 }); }
 
   /* ---------- alas: teto, luz, fundo de vidro, vitrines "em breve" ---------- */
   Object.values(alas).forEach(a => {
@@ -122,14 +123,23 @@ export function construirShopping(scene) {
     }
     const lista = EM_BREVE[a.id] || {};
     for (const lad of [-1, 1]) {
-      if ((a.id === VANTRA.ala && lad === VANTRA.lado) || (a.id === ATELIE.ala && lad === ATELIE.lado)) continue;            // esse lado é a loja VANTRA
+      if ((a.id === VANTRA.ala && lad === VANTRA.lado) || (a.id === ATELIE.ala && lad === ATELIE.lado) || (a.id === LEFERRI.ala && lad === LEFERRI.lado) || (a.id === 'street' && lad === -1)) continue;            // esse lado é a loja VANTRA
       const nomes = lista[String(lad)] || [], slot = (L - 6) / Math.max(nomes.length, 1), zf = lad * zAl;
+      // vitrines "em breve" com fachada em ARCO: parede branca contínua, vão em arco com vidro colorido, neon seguindo o arco
       nomes.forEach((nome, i) => {
         const cx = x0 + 3 + slot * (i + .5), cor = COR_BREVE[(i + (lad > 0 ? 3 : 0)) % COR_BREVE.length];
-        const painel = add(caixa(slot - .6, teto - 1.2, .25, new THREE.MeshPhysicalMaterial({ color: claro(cor, .3), roughness: .25, transparent: true, opacity: .78 })), g); painel.position.set(cx, (teto - 1.2) / 2 + .6, zf - lad * .12);
-        const letr = add(new THREE.Mesh(new THREE.PlaneGeometry(slot - 1.6, (slot - 1.6) * .3), new THREE.MeshBasicMaterial({ map: textoTex(nome, 'em breve', '#ffffff'), transparent: true, toneMapped: false })), g); letr.position.set(cx, 4.2, zf - lad * .27); letr.rotation.y = lad < 0 ? 0 : Math.PI;
-        for (const y of [1.0, teto - 1.0]) { const fio = add(caixa(slot - .6, .08, .12, new THREE.MeshStandardMaterial({ color: cor, emissive: cor, emissiveIntensity: 1.2 })), g); fio.position.set(cx, y, zf - lad * .3); }
-        const pil = add(caixa(.5, teto, .5, mBranco), g); pil.position.set(cx - slot / 2, teto / 2, zf);
+        const rA = Math.min(2.6, (slot - 2.4) / 2), hA = 5.4, T = .3;
+        const sh = new THREE.Shape(); sh.moveTo(-slot / 2, 0); sh.lineTo(slot / 2, 0); sh.lineTo(slot / 2, teto); sh.lineTo(-slot / 2, teto); sh.closePath();
+        const furo = new THREE.Path(); furo.moveTo(-rA, .35); furo.lineTo(rA, .35); furo.lineTo(rA, hA - rA); furo.absarc(0, hA - rA, rA, 0, Math.PI, false); furo.lineTo(-rA, .35); sh.holes.push(furo);
+        const pg = new THREE.ExtrudeGeometry(sh, { depth: T, bevelEnabled: false, curveSegments: 32 }); pg.translate(0, 0, -T / 2);
+        const parede = add(new THREE.Mesh(pg, mBranco), g); parede.position.set(cx, 0, zf - lad * .05); parede.receiveShadow = true;
+        const vs = new THREE.Shape(); vs.moveTo(-rA, .35); vs.lineTo(rA, .35); vs.lineTo(rA, hA - rA); vs.absarc(0, hA - rA, rA, 0, Math.PI, false); vs.lineTo(-rA, .35);
+        const vid = add(new THREE.Mesh(new THREE.ShapeGeometry(vs, 32), new THREE.MeshPhysicalMaterial({ color: claro(cor, .35), roughness: .2, transparent: true, opacity: .82, side: THREE.DoubleSide })), g); vid.position.set(cx, 0, zf + lad * .1);
+        const cont = []; for (let k = 0; k <= 40; k++) { const t = Math.PI * k / 40; cont.push(new THREE.Vector3(cx + Math.cos(t) * (rA + .08), hA - rA + Math.sin(t) * (rA + .08), zf - lad * .2)); }
+        cont.unshift(new THREE.Vector3(cx + rA + .08, .35, zf - lad * .2)); cont.push(new THREE.Vector3(cx - rA - .08, .35, zf - lad * .2));
+        add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(cont, false, 'catmullrom', 0), 120, .045, 8), new THREE.MeshStandardMaterial({ color: cor, emissive: cor, emissiveIntensity: 1.4 })), g);
+        const letr = add(new THREE.Mesh(new THREE.PlaneGeometry(slot - 1.6, (slot - 1.6) * .3), new THREE.MeshBasicMaterial({ map: textoTex(nome, 'em breve', '#3a3346', 768, 240, 'rgba(58,51,70,.6)'), transparent: true, toneMapped: false })), g); letr.position.set(cx, hA + 1.25, zf - lad * .2); letr.rotation.y = lad < 0 ? 0 : Math.PI;
+        const lp = add(new THREE.Mesh(new THREE.BoxGeometry(slot - .8, .05, .05), new THREE.MeshStandardMaterial({ color: cor, emissive: cor, emissiveIntensity: 1.2 })), g); lp.position.set(cx, .06, zf - lad * .25);
       });
       a.ret(x0, x1, lad * zAl - .3, lad * zAl + .3);
     }
